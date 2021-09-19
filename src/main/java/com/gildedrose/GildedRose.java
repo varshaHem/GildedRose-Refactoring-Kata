@@ -10,8 +10,7 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            Item item = items[i];
+        for (Item item : items) {
             updateQuality(item);
 
             updateSellIn(item);
@@ -25,10 +24,7 @@ class GildedRose {
         if (isNeitherAgedBrieNorBackStagePassess(item)) {
             decreaseQualityIfItemHasQuality(item);
         } else {
-            if (item.quality < MAX_QUALITY) {
-                increaseQuality(item);
-                updateQualityOfBackStagePasses(item);
-            }
+           increaseQualityIfLessThanMax(item);
         }
     }
 
@@ -66,6 +62,7 @@ class GildedRose {
     private void increaseQualityIfLessThanMax(Item item) {
         if (item.quality < MAX_QUALITY) {
             increaseQuality(item);
+            updateQualityOfBackStagePasses(item);
         }
     }
 
@@ -93,16 +90,16 @@ class GildedRose {
         }
     }
 
-    private boolean isAgedBrie(Item item) {
-        return item.name.equals(ItemName.AGED_BRIE.getItemName());
-    }
-
     private void handleExpiredItemNotAgedBrie(Item item) {
         if (isBackStagePassess(item)) {
-            item.quality = item.quality - item.quality;
+            item.quality = 0;
         } else {
             decreaseQualityIfItemHasQuality(item);
         }
+    }
+
+    private boolean isAgedBrie(Item item) {
+        return item.name.equals(ItemName.AGED_BRIE.getItemName());
     }
 
     private boolean isBackStagePassess(Item item) {
